@@ -21,4 +21,11 @@ public class SentenceConsumer {
         sentences.goodSentences.add(s);
         System.out.println("In addGoodSentence Method : " + sentences.goodSentences);
     }
+
+    @RabbitListener(queues = "GetQueue")
+    public Sentence getSentence(){
+        System.out.println("Demo Good Sentence : "+sentences.goodSentences);
+        System.out.println("Demo Bad Sentence : "+sentences.badSentences);
+         return sentences;
+    }
 }

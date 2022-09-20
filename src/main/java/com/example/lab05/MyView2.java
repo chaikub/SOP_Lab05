@@ -37,6 +37,7 @@ public class MyView2 extends HorizontalLayout {
         cb2 = new ComboBox<String>("Bad Words");
         vl1 = new VerticalLayout();
         vl2 = new VerticalLayout();
+        nf = new Notification();
 
         tf1.setWidthFull();
         tf2.setWidthFull();

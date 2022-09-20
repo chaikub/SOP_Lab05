@@ -52,7 +52,7 @@ public class WordPublisher {
     }
 
     @RequestMapping(value = "/proof/{sentence}", method = RequestMethod.GET)
-    public void proofSentence(@PathVariable("sentence") String s){
+    public String proofSentence(@PathVariable("sentence") String s){
         String count = "";
         for(String i : words.goodWords){
             if(s.indexOf(i) !=-1){
@@ -66,12 +66,22 @@ public class WordPublisher {
                 break;
             }
         }
-        if(count.equals("g")){
-            rabbitTemplate.convertAndSend("DirectExchange", "good", s);
-        } else if (count.equals("b")) {
-            rabbitTemplate.convertAndSend("DirectExchange", "bad", s);
-        } else if (count.equals("gb")) {
+        if (count.equals("gb")) {
             rabbitTemplate.convertAndSend("FanoutExchange", "", s);
+            return("Add Good and Bad Sentence");
+        }else if(count.equals("g")){
+            rabbitTemplate.convertAndSend("DirectExchange", "good", s);
+            return("Add Good Sentence");
+        }else if (count.equals("b")) {
+            rabbitTemplate.convertAndSend("DirectExchange", "bad", s);
+            return("Add Bad Sentence");
         }
+        return "";
+    }
+
+    @RequestMapping(value = "/getSentence", method = RequestMethod.GET)
+    public Sentence getSentence(){
+        System.out.println("In publisher");
+        return (Sentence) rabbitTemplate.convertSendAndReceive("DirectExchange", "get", "");
     }
 }
